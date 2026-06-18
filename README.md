@@ -8,7 +8,7 @@
 
 ---
 <p align="center">
-  <img src="root-agi.mp4" width="400" height="400"/>
+  <img src="root-agi.gif" width="400" height="400"/>
 </p>
 
 # <img src="https://media.giphy.com/media/VgCDAzcKvsR6OM0uWg/giphy.gif" width="50"> ![Welcome](https://img.shields.io/badge/WELCOME-000000?style=for-the-badge&logo=terminal&logoColor=00FF00)
