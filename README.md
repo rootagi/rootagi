@@ -1,5 +1,3 @@
-
-<!-- HEADER & TYPING EFFECT -->
 <div align="center">
   <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=700&size=28&duration=2500&pause=800&color=00FF00&center=true&vCenter=true&width=500&lines=USER%3A+id-root;SYSTEM%3A+Arch+Linux;SHELL%3A+Bash%2BNvim;LAB%3A+TryHackMe;Level%3AIntermidiate" alt="Typing SVG" />
 </div>
@@ -10,10 +8,8 @@
 
 ---
 <p align="center">
-  <video src="rootagi.mp4" width="400" height="400" alt="id-root GIF">
+  <video src="rootagi.mp4" width="400" height="400" autoplay loop muted playsinline></video>
 </p>
-
-<!-- INTRO SECTION -->
 
 # <img src="https://media.giphy.com/media/VgCDAzcKvsR6OM0uWg/giphy.gif" width="50"> ![Welcome](https://img.shields.io/badge/WELCOME-000000?style=for-the-badge&logo=terminal&logoColor=00FF00)
 
@@ -27,8 +23,7 @@
 
 > **Open your eyes, the truth lies</p>**
 # <img src="https://media.giphy.com/media/WUlplcMpOCEmTGBtBW/giphy.gif" width="30"> ![Arsenal](https://img.shields.io/badge/ARSENAL-000000?style=for-the-badge&logo=terminal&logoColor=00FF00)
-<!-- ARSENAL / TECH STACK -->
-```
+```text
 ╔══  [ $ cat arsenal.txt ]  ══════════════════════════════════════════════╗
 ║ USER: root@archlinux     STATUS: LEARNING        AVG: 75%               ║
 ╠═════════════════════════════════════════════════════════════════════════╣
@@ -52,13 +47,3 @@
 ║  0x0B Docker/Container   [████████░░░░░░░░░░░░]   40% :: DEPLOYING      ║
 ║                                                                         ║
 ╚═════════════════════════════════════════════════════════════════════════╝
-```
-
-# <img src="https://media.giphy.com/media/LmNwrBhejkK9EFP504/giphy.gif" width="30"> ![Activity Architecture](https://img.shields.io/badge/ACTIVITY_ARCHITECTURE-000000?style=for-the-badge&logo=github&logoColor=00FF00)
-<div align="center">
-  <img src="./profile-3d-contrib/profile-green-animate.svg" alt="3D Isometric Commit Graph" />
-</div>
-
-
-
-
