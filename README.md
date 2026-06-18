@@ -8,7 +8,7 @@
 
 ---
 <p align="center">
-  <video src="rootagi.mp4" width="400" height="400" autoplay loop muted playsinline></video>
+  <video src="root-agi.mp4" width="400" height="400" autoplay loop muted playsinline></video>
 </p>
 
 # <img src="https://media.giphy.com/media/VgCDAzcKvsR6OM0uWg/giphy.gif" width="50"> ![Welcome](https://img.shields.io/badge/WELCOME-000000?style=for-the-badge&logo=terminal&logoColor=00FF00)
