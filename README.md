@@ -10,7 +10,7 @@
 
 ---
 <p align="center">
-  <img src="id-root.gif" width="400" height="400" alt="id-root GIF">
+  <img src="rootagi.mp4" width="400" height="400" alt="id-root GIF">
 </p>
 
 <!-- INTRO SECTION -->
