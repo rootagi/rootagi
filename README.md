@@ -3,7 +3,7 @@
 </div>
 
 <div align="center">
-  <img src="https://komarev.com/ghpvc/?username=rootagi&style=for-the-badge&label=SYSTEM+ACCESSES&color=00ff00&v=1" alt="Access Counter" />
+  <img src="https://komarev.com/ghpvc/?username=rootagi&style=for-the-badge&label=SYSTEM+ACCESSES&color=00ff00" alt="Access Counter" />
 </div>
 
 ---
