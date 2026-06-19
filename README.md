@@ -1,9 +1,9 @@
 <div align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=700&size=28&duration=2500&pause=800&color=00FF00&center=true&vCenter=true&width=500&lines=USER%3A+id-root;SYSTEM%3A+Arch+Linux;SHELL%3A+Bash%2BNvim;LAB%3A+TryHackMe;Level%3AIntermidiate" alt="Typing SVG" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=700&size=28&duration=2500&pause=800&color=00FF00&center=true&vCenter=true&width=500&lines=USER%3A+rootagi;SYSTEM%3A+Arch+Linux;SHELL%3A+Bash%2BNvim;LAB%3A+TryHackMe;Level%3AIntermidiate" alt="Typing SVG" />
 </div>
 
 <div align="center">
-  <img src="https://komarev.com/ghpvc/?username=id-root&style=for-the-badge&label=SYSTEM+ACCESSES&color=00ff00" alt="Access Counter" />
+  <img src="https://komarev.com/ghpvc/?username=rootagi&style=for-the-badge&label=SYSTEM+ACCESSES&color=00ff00" alt="Access Counter" />
 </div>
 
 ---
