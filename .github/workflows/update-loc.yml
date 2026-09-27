@@ -1,0 +1,58 @@
+name: Refresh Neofetch Profile
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # every day 00:00 UTC — always bumps the cache-buster
+  workflow_dispatch: {} # manual trigger always does a full LOC recalculation
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Decide whether today does a full LOC recalculation
+        id: schedule
+        run: |
+          # Full clone-and-cloc pass on Mondays or whenever manually triggered.
+          # Every other day only bumps the cache-buster (cheap, fast).
+          if [ "$(date +%u)" = "1" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "run_loc=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run_loc=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install cloc
+        if: steps.schedule.outputs.run_loc == 'true'
+        run: sudo apt-get update -y && sudo apt-get install -y cloc
+
+      - name: Set up Node
+        if: steps.schedule.outputs.run_loc == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Calculate real LOC across all public repos
+        if: steps.schedule.outputs.run_loc == 'true'
+        env:
+          GH_USERNAME: rootagi
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EXCLUDE_REPOS: walls,wallpaper
+        run: node scripts/calculate-loc.mjs
+
+      - name: Bump README cache-buster
+        run: |
+          DATE_TAG=$(date +'%Y-%m-%d')
+          sed -i -E "s/v=[0-9a-zA-Z_-]+/v=$DATE_TAG/g" README.md
+          echo "DATE_TAG=$DATE_TAG" >> "$GITHUB_ENV"
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md neofetch.json loc.json
+          git diff --staged --quiet || (git commit -m "chore: refresh profile stats [$DATE_TAG]" && git push)
