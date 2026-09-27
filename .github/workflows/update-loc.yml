@@ -42,6 +42,7 @@ jobs:
           GH_USERNAME: rootagi
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           EXCLUDE_REPOS: walls,wallpaper
+          INCLUDE_FORKS: "true"
         run: node scripts/calculate-loc.mjs
 
       - name: Bump README cache-buster
