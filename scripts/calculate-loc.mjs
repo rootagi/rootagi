@@ -50,7 +50,7 @@ const headers = {
   ...(TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {}),
 };
 
-async function listPublicRepos(username) {
+async function listPublicRepos(username, skipped) {
   const repos = [];
   let page = 1;
   for (;;) {
@@ -71,20 +71,21 @@ async function listPublicRepos(username) {
     if (!INCLUDE_FORKS && r.fork) return false;
     if (r.archived) return false;
     if (EXCLUDE_REPOS.includes(r.name.toLowerCase())) {
-      console.log(`Skipping ${r.full_name} (explicitly excluded)`);
+      skipped.push({ repo: r.full_name, reason: "explicitly excluded" });
       return false;
     }
     if (MAX_REPO_SIZE_KB > 0 && r.size > MAX_REPO_SIZE_KB) {
-      console.log(
-        `Skipping ${r.full_name} (size ${r.size} KB exceeds ${MAX_REPO_SIZE_KB} KB cap)`
-      );
+      skipped.push({
+        repo: r.full_name,
+        reason: `size ${r.size} KB exceeds ${MAX_REPO_SIZE_KB} KB cap`,
+      });
       return false;
     }
     return true;
   });
 }
 
-function cloneAndCount(repo, workDir) {
+function cloneAndCount(repo, workDir, skipped) {
   const dest = path.join(workDir, repo.name);
   const cloneUrl = TOKEN
     ? repo.clone_url.replace("https://", `https://x-access-token:${TOKEN}@`)
@@ -97,6 +98,7 @@ function cloneAndCount(repo, workDir) {
     });
   } catch {
     console.warn(`  skipped (clone failed): ${repo.full_name}`);
+    skipped.push({ repo: repo.full_name, reason: "clone failed" });
     return 0;
   }
 
@@ -111,6 +113,7 @@ function cloneAndCount(repo, workDir) {
     return code;
   } catch {
     console.warn(`  skipped (cloc failed, likely no source files): ${repo.full_name}`);
+    skipped.push({ repo: repo.full_name, reason: "cloc failed / no source files" });
     return 0;
   } finally {
     fs.rmSync(dest, { recursive: true, force: true });
@@ -118,18 +121,28 @@ function cloneAndCount(repo, workDir) {
 }
 
 async function main() {
-  const repos = await listPublicRepos(USERNAME);
-  console.log(`Found ${repos.length} public repos for ${USERNAME}`);
+  const skipped = [];
+  const repos = await listPublicRepos(USERNAME, skipped);
+  console.log(`Found ${repos.length} public repos to scan for ${USERNAME}`);
 
   const workDir = fs.mkdtempSync(path.join(os.tmpdir(), "loc-"));
   let total = 0;
 
   for (const repo of repos) {
-    total += cloneAndCount(repo, workDir);
+    total += cloneAndCount(repo, workDir, skipped);
   }
   fs.rmSync(workDir, { recursive: true, force: true });
 
   console.log(`\nTotal lines of code across ${repos.length} public repos: ${total}`);
+
+  if (skipped.length > 0) {
+    console.log(`\n--- Skipped ${skipped.length} repo(s), see reasons below ---`);
+    for (const s of skipped) console.log(`  ${s.repo}: ${s.reason}`);
+    console.log(
+      "If a real code repo shows up here, check EXCLUDE_REPOS/MAX_REPO_SIZE_KB " +
+        "or a transient clone/cloc failure, then re-run."
+    );
+  }
 
   const formatted = total.toLocaleString("en-US");
 
@@ -138,20 +151,26 @@ async function main() {
     const rows = config.stats?.rows || [];
     let patched = false;
 
+    // Drop the service's own built-in fake-estimate row (the bare string
+    // "loc"), and update our real row in place if it's already there.
+    const newRows = [];
     for (const row of rows) {
+      if (row === "loc") continue; // remove built-in fake estimate
       if (row?.left?.key === "Lines of Code") {
         row.left.value = formatted;
         patched = true;
       }
+      newRows.push(row);
     }
 
     if (!patched) {
-      rows.push({
+      newRows.push({
         left: { key: "Lines of Code", value: formatted },
         right: { key: "Tool", value: "cloc" },
       });
     }
 
+    config.stats.rows = newRows;
     fs.writeFileSync(CONFIG_PATH, JSON.stringify(config, null, 2) + "\n");
     console.log(`Updated ${CONFIG_PATH}`);
   } else {
@@ -161,7 +180,12 @@ async function main() {
   fs.writeFileSync(
     "loc.json",
     JSON.stringify(
-      { total, repos: repos.length, updatedAt: new Date().toISOString() },
+      {
+        total,
+        reposScanned: repos.length,
+        reposSkipped: skipped,
+        updatedAt: new Date().toISOString(),
+      },
       null,
       2
     ) + "\n"
