@@ -174,11 +174,10 @@
           "valueColor": "#202124, #e8eaed"
         }
       },
-      "loc",
       {
         "left": {
           "key": "Lines of Code",
-          "value": "71,935"
+          "value": "84,999"
         },
         "right": {
           "key": "Tool",
