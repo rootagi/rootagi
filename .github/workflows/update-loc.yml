@@ -47,9 +47,9 @@ jobs:
 
       - name: Bump README cache-buster
         run: |
-          DATE_TAG=$(date +'%Y-%m-%d')
-          sed -i -E "s/v=[0-9a-zA-Z_-]+/v=$DATE_TAG/g" README.md
-          echo "DATE_TAG=$DATE_TAG" >> "$GITHUB_ENV"
+          RUN_TAG="${{ github.run_id }}-${{ github.run_attempt }}"
+          sed -i -E "s/v=[0-9a-zA-Z_-]+/v=$RUN_TAG/g" README.md
+          echo "DATE_TAG=$(date +'%Y-%m-%d')" >> "$GITHUB_ENV"
 
       - name: Commit and Push
         run: |
