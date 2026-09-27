@@ -12,12 +12,42 @@
         "line": "#4285f4, #4285f4"
       },
       "fields": [
-        { "key": "Handle", "value": "{{username}}", "keyColor": "#1a73e8, #8ab4f8", "valueColor": "#202124, #e8eaed" },
-        { "key": "Focus", "value": "Offensive Security & Binary Exploitation", "keyColor": "#1a73e8, #8ab4f8", "valueColor": "#202124, #e8eaed" },
-        { "key": "Core Stack", "value": "Rust, C, x86_64 ASM, Python", "keyColor": "#1a73e8, #8ab4f8", "valueColor": "#202124, #e8eaed" },
-        { "key": "OS / Arch", "value": "Linux / x86_64", "keyColor": "#1a73e8, #8ab4f8", "valueColor": "#202124, #e8eaed" },
-        { "key": "Editor", "value": "LazyVim, Cursor", "keyColor": "#1a73e8, #8ab4f8", "valueColor": "#202124, #e8eaed" },
-        { "key": "Uptime", "value": "{{uptime}}", "keyColor": "#1a73e8, #8ab4f8", "valueColor": "#202124, #e8eaed" }
+        {
+          "key": "Handle",
+          "value": "{{username}}",
+          "keyColor": "#1a73e8, #8ab4f8",
+          "valueColor": "#202124, #e8eaed"
+        },
+        {
+          "key": "Focus",
+          "value": "Offensive Security & Binary Exploitation",
+          "keyColor": "#1a73e8, #8ab4f8",
+          "valueColor": "#202124, #e8eaed"
+        },
+        {
+          "key": "Core Stack",
+          "value": "Rust, C, x86_64 ASM, Python",
+          "keyColor": "#1a73e8, #8ab4f8",
+          "valueColor": "#202124, #e8eaed"
+        },
+        {
+          "key": "OS / Arch",
+          "value": "Linux / x86_64",
+          "keyColor": "#1a73e8, #8ab4f8",
+          "valueColor": "#202124, #e8eaed"
+        },
+        {
+          "key": "Editor",
+          "value": "LazyVim, Cursor",
+          "keyColor": "#1a73e8, #8ab4f8",
+          "valueColor": "#202124, #e8eaed"
+        },
+        {
+          "key": "Uptime",
+          "value": "{{uptime}}",
+          "keyColor": "#1a73e8, #8ab4f8",
+          "valueColor": "#202124, #e8eaed"
+        }
       ]
     },
     {
@@ -27,10 +57,30 @@
         "line": "#ea4335, #ea4335"
       },
       "fields": [
-        { "key": "Learning", "value": "Reverse Engineering, OS, Exploit Dev", "keyColor": "#d93025, #f28b82", "valueColor": "#202124, #e8eaed" },
-        { "key": "Interests", "value": "Artificial intelligence, Awaiting AGI", "keyColor": "#d93025, #f28b82", "valueColor": "#202124, #e8eaed" },
-        { "key": "Tooling", "value": "GDB/GEF, Ghidra, Radare2, IDA Pro, Cargo", "keyColor": "#d93025, #f28b82", "valueColor": "#202124, #e8eaed" },
-        { "key": "Top Languages", "value": "{{languages}}", "keyColor": "#d93025, #f28b82", "valueColor": "#202124, #e8eaed" }
+        {
+          "key": "Learning",
+          "value": "Reverse Engineering, OS, Exploit Dev",
+          "keyColor": "#d93025, #f28b82",
+          "valueColor": "#202124, #e8eaed"
+        },
+        {
+          "key": "Interests",
+          "value": "Artificial intelligence, Awaiting AGI",
+          "keyColor": "#d93025, #f28b82",
+          "valueColor": "#202124, #e8eaed"
+        },
+        {
+          "key": "Tooling",
+          "value": "GDB/GEF, Ghidra, Radare2, IDA Pro, Cargo",
+          "keyColor": "#d93025, #f28b82",
+          "valueColor": "#202124, #e8eaed"
+        },
+        {
+          "key": "Top Languages",
+          "value": "{{languages}}",
+          "keyColor": "#d93025, #f28b82",
+          "valueColor": "#202124, #e8eaed"
+        }
       ]
     },
     {
@@ -40,9 +90,24 @@
         "line": "#34a853, #34a853"
       },
       "fields": [
-        { "key": "Email", "value": "rootagi@duck.com", "keyColor": "#188038, #81c995", "valueColor": "#202124, #e8eaed" },
-        { "key": "GitHub", "value": "https://github.com/{{username}}", "keyColor": "#188038, #81c995", "valueColor": "#202124, #e8eaed" },
-        { "key": "X / Twitter", "value": "https://x.com/rootagi", "keyColor": "#188038, #81c995", "valueColor": "#202124, #e8eaed" }
+        {
+          "key": "Email",
+          "value": "rootagi@duck.com",
+          "keyColor": "#188038, #81c995",
+          "valueColor": "#202124, #e8eaed"
+        },
+        {
+          "key": "GitHub",
+          "value": "https://github.com/{{username}}",
+          "keyColor": "#188038, #81c995",
+          "valueColor": "#202124, #e8eaed"
+        },
+        {
+          "key": "X / Twitter",
+          "value": "https://x.com/rootagi",
+          "keyColor": "#188038, #81c995",
+          "valueColor": "#202124, #e8eaed"
+        }
       ]
     }
   ],
@@ -54,22 +119,72 @@
     },
     "rows": [
       {
-        "left": { "key": "Repos", "value": "{{repos}}", "keyColor": "#b06000, #fdd663", "valueColor": "#202124, #e8eaed" },
-        "right": { "key": "Stars", "value": "{{stars}}", "keyColor": "#b06000, #fdd663", "valueColor": "#202124, #e8eaed" }
+        "left": {
+          "key": "Repos",
+          "value": "{{repos}}",
+          "keyColor": "#b06000, #fdd663",
+          "valueColor": "#202124, #e8eaed"
+        },
+        "right": {
+          "key": "Stars",
+          "value": "{{stars}}",
+          "keyColor": "#b06000, #fdd663",
+          "valueColor": "#202124, #e8eaed"
+        }
       },
       {
-        "left": { "key": "Commits", "value": "{{commits}}", "keyColor": "#b06000, #fdd663", "valueColor": "#202124, #e8eaed" },
-        "right": { "key": "Forks", "value": "{{forks}}", "keyColor": "#b06000, #fdd663", "valueColor": "#202124, #e8eaed" }
+        "left": {
+          "key": "Commits",
+          "value": "{{commits}}",
+          "keyColor": "#b06000, #fdd663",
+          "valueColor": "#202124, #e8eaed"
+        },
+        "right": {
+          "key": "Forks",
+          "value": "{{forks}}",
+          "keyColor": "#b06000, #fdd663",
+          "valueColor": "#202124, #e8eaed"
+        }
       },
       {
-        "left": { "key": "Issues", "value": "{{issues}}", "keyColor": "#b06000, #fdd663", "valueColor": "#202124, #e8eaed" },
-        "right": { "key": "Gists", "value": "{{gists}}", "keyColor": "#b06000, #fdd663", "valueColor": "#202124, #e8eaed" }
+        "left": {
+          "key": "Issues",
+          "value": "{{issues}}",
+          "keyColor": "#b06000, #fdd663",
+          "valueColor": "#202124, #e8eaed"
+        },
+        "right": {
+          "key": "Gists",
+          "value": "{{gists}}",
+          "keyColor": "#b06000, #fdd663",
+          "valueColor": "#202124, #e8eaed"
+        }
       },
       {
-        "left": { "key": "Followers", "value": "{{followers}}", "keyColor": "#b06000, #fdd663", "valueColor": "#202124, #e8eaed" },
-        "right": { "key": "Following", "value": "{{following}}", "keyColor": "#b06000, #fdd663", "valueColor": "#202124, #e8eaed" }
+        "left": {
+          "key": "Followers",
+          "value": "{{followers}}",
+          "keyColor": "#b06000, #fdd663",
+          "valueColor": "#202124, #e8eaed"
+        },
+        "right": {
+          "key": "Following",
+          "value": "{{following}}",
+          "keyColor": "#b06000, #fdd663",
+          "valueColor": "#202124, #e8eaed"
+        }
       },
-      "loc"
+      "loc",
+      {
+        "left": {
+          "key": "Lines of Code",
+          "value": "71,935"
+        },
+        "right": {
+          "key": "Tool",
+          "value": "cloc"
+        }
+      }
     ]
   }
 }
