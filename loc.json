@@ -1,6 +1,6 @@
 {
-  "total": 84229,
-  "reposScanned": 16,
+  "total": 73571,
+  "reposScanned": 15,
   "reposSkipped": [
     {
       "repo": "rootagi/wallpaper",
@@ -11,5 +11,5 @@
       "reason": "explicitly excluded"
     }
   ],
-  "updatedAt": "2026-09-28T03:34:29.430Z"
+  "updatedAt": "2026-10-05T03:59:11.612Z"
 }
