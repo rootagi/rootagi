@@ -1,5 +1,5 @@
 {
-  "total": 86894,
+  "total": 95265,
   "reposScanned": 18,
   "reposSkipped": [
     {
@@ -11,5 +11,5 @@
       "reason": "explicitly excluded"
     }
   ],
-  "updatedAt": "2026-10-19T03:12:11.736Z"
+  "updatedAt": "2026-10-26T03:08:57.341Z"
 }
