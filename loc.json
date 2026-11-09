@@ -1,5 +1,5 @@
 {
-  "total": 95265,
+  "total": 96238,
   "reposScanned": 18,
   "reposSkipped": [
     {
@@ -9,7 +9,11 @@
     {
       "repo": "rootagi/walls",
       "reason": "explicitly excluded"
+    },
+    {
+      "repo": "rootagi/spectre",
+      "reason": "cloc failed / no source files"
     }
   ],
-  "updatedAt": "2026-11-02T04:20:59.927Z"
+  "updatedAt": "2026-11-09T04:36:41.397Z"
 }
