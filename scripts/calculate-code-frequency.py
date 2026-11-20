@@ -14,7 +14,7 @@ CONFIG_PATH = Path(os.environ.get("CONFIG_PATH", "neofetch.json"))
 
 EXCLUDED_REPOS = {
     name.strip().lower()
-    for name in os.environ.get("EXCLUDE_REPOS", "").split(",")
+    for name in os.environ.get("EXCLUDE_REPOS", "walls,wallpaper").split(",")
     if name.strip()
 }
 
@@ -159,13 +159,13 @@ def update_neofetch_config(total_additions, total_deletions):
 
     new_row = {
         "left": {
-            "key": "+",
+            "key": "+++",
             "value": f"{total_additions:,}",
             "keyColor": "#188038, #81c995",
             "valueColor": "#188038, #81c995",
         },
         "right": {
-            "key": "-",
+            "key": "---",
             "value": f"{total_deletions:,}",
             "keyColor": "#d93025, #f28b82",
             "valueColor": "#d93025, #f28b82",
@@ -178,7 +178,7 @@ def update_neofetch_config(total_additions, total_deletions):
         if isinstance(row, dict):
             left_key = str(row.get("left", {}).get("key", ""))
             right_key = str(row.get("right", {}).get("key", ""))
-            if left_key in ("Lines of Code", "+") or right_key in ("Tool", "-"):
+            if left_key in ("Lines of Code", "+", "+++") or right_key in ("Tool", "-", "---"):
                 new_rows.append(new_row)
                 patched = True
                 continue
