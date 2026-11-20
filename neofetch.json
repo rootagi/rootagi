@@ -176,12 +176,16 @@
       },
       {
         "left": {
-          "key": "Lines of Code",
-          "value": "108,468"
+          "key": "+",
+          "value": "995,844",
+          "keyColor": "#188038, #81c995",
+          "valueColor": "#188038, #81c995"
         },
         "right": {
-          "key": "Tool",
-          "value": "cloc"
+          "key": "-",
+          "value": "147,821",
+          "keyColor": "#d93025, #f28b82",
+          "valueColor": "#d93025, #f28b82"
         }
       }
     ]

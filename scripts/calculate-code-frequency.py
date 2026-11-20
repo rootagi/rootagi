@@ -1,8 +1,5 @@
-
 #!/usr/bin/env python3
 
-from collections import defaultdict
-from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.request import Request, urlopen
 import json
@@ -11,42 +8,17 @@ import subprocess
 import sys
 import tempfile
 
-
 USERNAME = os.environ.get("GH_USERNAME", "rootagi")
 TOKEN = os.environ.get("GITHUB_TOKEN", "")
+CONFIG_PATH = Path(os.environ.get("CONFIG_PATH", "neofetch.json"))
 
 EXCLUDED_REPOS = {
-    name.strip()
-    for name in os.environ.get(
-        "EXCLUDE_REPOS", ""
-    ).split(",")
+    name.strip().lower()
+    for name in os.environ.get("EXCLUDE_REPOS", "").split(",")
     if name.strip()
 }
 
-INCLUDE_FORKS = (
-    os.environ.get("INCLUDE_FORKS", "false").lower()
-    == "true"
-)
-
-OUTPUT_FILE = Path("code-frequency.json")
-
-
-def get_sunday_timestamp(unix_ts):
-    dt = datetime.fromtimestamp(
-        unix_ts,
-        tz=timezone.utc
-    )
-
-    days_since_sunday = (dt.weekday() + 1) % 7
-
-    sunday = dt.replace(
-        hour=0,
-        minute=0,
-        second=0,
-        microsecond=0
-    ) - timedelta(days=days_since_sunday)
-
-    return int(sunday.timestamp())
+INCLUDE_FORKS = os.environ.get("INCLUDE_FORKS", "false").lower() == "true"
 
 
 def get_public_repositories():
@@ -77,14 +49,14 @@ def get_public_repositories():
             break
 
         for repo in batch:
-            if repo["name"] in EXCLUDED_REPOS:
+            if repo["name"].lower() in EXCLUDED_REPOS:
                 print(f"Skipping excluded repository: {repo['name']}")
                 continue
 
-            if repo["private"]:
+            if repo.get("private"):
                 continue
 
-            if repo["fork"] and not INCLUDE_FORKS:
+            if repo.get("fork") and not INCLUDE_FORKS:
                 continue
 
             repositories.append(repo)
@@ -97,26 +69,33 @@ def get_public_repositories():
     return repositories
 
 
-def calculate_repository_frequency(repo, weekly_stats):
+def calculate_repository_frequency(repo, totals):
     repo_name = repo["full_name"]
     repo_url = repo["clone_url"]
+    if TOKEN:
+        repo_url = repo_url.replace("https://", f"https://x-access-token:{TOKEN}@")
 
     print(f"\nProcessing: {repo_name}")
 
     with tempfile.TemporaryDirectory() as tmpdir:
         clone_path = str(Path(tmpdir) / "repository.git")
 
-        subprocess.run(
-            [
-                "git",
-                "clone",
-                "--bare",
-                "--quiet",
-                repo_url,
-                clone_path,
-            ],
-            check=True,
-        )
+        try:
+            subprocess.run(
+                [
+                    "git",
+                    "clone",
+                    "--bare",
+                    "--quiet",
+                    repo_url,
+                    clone_path,
+                ],
+                check=True,
+                capture_output=True,
+            )
+        except subprocess.CalledProcessError as exc:
+            print(f"  Warning: failed to clone {repo_name}: {exc}")
+            return
 
         cmd = [
             "git",
@@ -125,93 +104,126 @@ def calculate_repository_frequency(repo, weekly_stats):
             "log",
             "--no-merges",
             "--numstat",
-            "--format=COMMIT:%ct",
+            "--format=",
         ]
 
-        result = subprocess.run(
-            cmd,
-            capture_output=True,
-            text=True,
-            check=True,
-        )
+        try:
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+        except subprocess.CalledProcessError as exc:
+            print(f"  Warning: failed to get git log for {repo_name}: {exc}")
+            return
 
-    current_week = None
+    repo_additions = 0
+    repo_deletions = 0
 
     for line in result.stdout.splitlines():
+        line = line.strip()
+        if not line:
+            continue
 
-        if line.startswith("COMMIT:"):
-            timestamp = int(line.split(":")[1])
-            current_week = get_sunday_timestamp(timestamp)
+        parts = line.split("\t")
+        if len(parts) != 3:
+            continue
 
-        elif line.strip() and current_week is not None:
-            parts = line.split("\t")
+        additions, deletions, _ = parts
 
-            if len(parts) != 3:
+        # Binary files contain "-" instead of line counts.
+        if additions.isdigit() and deletions.isdigit():
+            repo_additions += int(additions)
+            repo_deletions += int(deletions)
+
+    print(f"  + {repo_additions:,} / - {repo_deletions:,}")
+    totals["additions"] += repo_additions
+    totals["deletions"] += repo_deletions
+
+
+def update_neofetch_config(total_additions, total_deletions):
+    if not CONFIG_PATH.exists():
+        print(f"Warning: {CONFIG_PATH} not found — skipping config patch")
+        return
+
+    with CONFIG_PATH.open("r", encoding="utf-8") as f:
+        config = json.load(f)
+
+    if "stats" not in config:
+        config["stats"] = {}
+
+    rows = config.get("stats", {}).get("rows", [])
+    new_rows = []
+    patched = False
+
+    new_row = {
+        "left": {
+            "key": "+",
+            "value": f"{total_additions:,}",
+            "keyColor": "#188038, #81c995",
+            "valueColor": "#188038, #81c995",
+        },
+        "right": {
+            "key": "-",
+            "value": f"{total_deletions:,}",
+            "keyColor": "#d93025, #f28b82",
+            "valueColor": "#d93025, #f28b82",
+        },
+    }
+
+    for row in rows:
+        if row == "loc":
+            continue  # drop service's fake estimate if present
+        if isinstance(row, dict):
+            left_key = str(row.get("left", {}).get("key", ""))
+            right_key = str(row.get("right", {}).get("key", ""))
+            if left_key in ("Lines of Code", "+") or right_key in ("Tool", "-"):
+                new_rows.append(new_row)
+                patched = True
                 continue
+        new_rows.append(row)
 
-            additions, deletions, _ = parts
+    if not patched:
+        new_rows.append(new_row)
 
-            # Binary files contain "-" instead of line counts.
-            if additions.isdigit() and deletions.isdigit():
-                weekly_stats[current_week]["additions"] += int(additions)
-                weekly_stats[current_week]["deletions"] += int(deletions)
+    config["stats"]["rows"] = new_rows
+
+    with CONFIG_PATH.open("w", encoding="utf-8") as f:
+        json.dump(config, f, indent=2)
+        f.write("\n")
+
+    print(f"\nUpdated {CONFIG_PATH} successfully:")
+    print(f"  + : {total_additions:,}")
+    print(f"  - : {total_deletions:,}")
 
 
 def main():
     print(f"Fetching public repositories for {USERNAME}...")
-
     repositories = get_public_repositories()
-
     print(f"Found {len(repositories)} repositories.")
 
-    weekly_stats = defaultdict(
-        lambda: {
-            "additions": 0,
-            "deletions": 0,
-        }
-    )
+    totals = {"additions": 0, "deletions": 0}
 
     for index, repo in enumerate(repositories, start=1):
-        print(f"\n[{index}/{len(repositories)}]")
+        print(f"[{index}/{len(repositories)}]", end=" ")
+        calculate_repository_frequency(repo, totals)
 
-        calculate_repository_frequency(
-            repo,
-            weekly_stats,
-        )
-
-    output = [
-        [
-            week,
-            stats["additions"],
-            -stats["deletions"],
-        ]
-        for week, stats in sorted(weekly_stats.items())
-    ]
-
-    with OUTPUT_FILE.open("w", encoding="utf-8") as file:
-        json.dump(output, file, indent=2)
-
-    total_additions = sum(
-        item[1] for item in output
-    )
-
-    total_deletions = sum(
-        -item[2] for item in output
-    )
+    total_additions = totals["additions"]
+    total_deletions = totals["deletions"]
 
     print("\nCode frequency calculation complete.")
     print(f"Repositories processed: {len(repositories)}")
-    print(f"Weeks recorded: {len(output)}")
     print(f"Total additions: {total_additions:,}")
     print(f"Total deletions: {total_deletions:,}")
     print(f"Net change: {total_additions - total_deletions:,}")
-    print(f"Output: {OUTPUT_FILE}")
+
+    update_neofetch_config(total_additions, total_deletions)
 
 
 if __name__ == "__main__":
     try:
         main()
-
     except Exception as exc:
         print(f"\nERROR: {exc}", file=sys.stderr)
         sys.exit(1)
