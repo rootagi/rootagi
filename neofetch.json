@@ -177,13 +177,13 @@
       {
         "left": {
           "key": "+++",
-          "value": "1,978,335",
+          "value": "1,978,345",
           "keyColor": "#188038, #81c995",
           "valueColor": "#188038, #81c995"
         },
         "right": {
           "key": "---",
-          "value": "148,292",
+          "value": "148,302",
           "keyColor": "#d93025, #f28b82",
           "valueColor": "#d93025, #f28b82"
         }
